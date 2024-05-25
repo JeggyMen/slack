@@ -1,0 +1,23 @@
+.chatInfo {
+    height:60px;
+    background-color: #8744f3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px;
+    color: aliceblue;
+    font-size: 1.5em;
+}
+
+.chatIcons i {
+    margin-left: 10px; 
+    margin-right: 10px; 
+    cursor: pointer;
+}
+
+.ChatWindow {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #f0f0f0; /* Optional: background color for the chat window */
+}

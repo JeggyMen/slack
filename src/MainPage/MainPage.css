@@ -1,0 +1,26 @@
+.MainPage {
+    background: linear-gradient( 135deg, #EE9AE5 10%, #5961F9 100%);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    border: 1px solid white;
+    border-radius: 15px;
+    width: 70%;
+    height: 90%;
+    display: flex;
+    padding: 0%;
+    overflow: hidden;
+}
+
+.container > .sidebar {
+    flex: 1; 
+    background-color: rgba(100, 20, 100, 0.856)
+  }
+  
+.container > .chatWindow {
+    flex: 2; 
+}

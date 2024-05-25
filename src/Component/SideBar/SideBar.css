@@ -1,0 +1,18 @@
+.bg-violet {
+    background-color: rgba(100, 20, 100, 0.856);
+}
+
+li {
+    list-style-type: none;
+}
+
+
+
+.content {
+    margin-top: 56px; /* Adjust if you have a fixed navbar */
+}
+
+.log-out {
+    margin-bottom: 100px;
+}
+

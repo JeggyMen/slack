@@ -1,0 +1,27 @@
+.image-small {
+    width: 750px; 
+    height: auto; 
+}
+
+.border-shadow {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Adjust the shadow as needed */
+    border: 1px solid #ddd; /* Optional: add a border */
+ }
+
+
+.signup-btn{
+    border: none;
+    background-color: rgba(100, 20, 100, 0.856);
+    color: white;
+    width: 100%;
+    font-size: 1.2em;
+}
+
+.signup-title{
+    border-bottom: 3px solid rgba(100, 20, 100, 0.856); 
+    font-size: 2.5em;
+}
+
+.signup-container {
+     background: linear-gradient( 135deg, #EE9AE5 10%, #5961F9 100%);
+}

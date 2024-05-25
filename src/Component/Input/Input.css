@@ -1,0 +1,22 @@
+.input {
+    background-color: white;
+    height: 90px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 2px;
+    border-bottom-right-radius: 15px;
+}
+
+.input > .inputArea {
+    width: 100%;
+    border: none;
+    outline: none;
+    
+}
+
+button {
+   margin-right: 20px;
+}
