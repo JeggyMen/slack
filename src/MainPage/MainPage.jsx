@@ -3,12 +3,14 @@ import SideBar from '../Component/SideBar/SideBar'
 import ChatWindow from '../Component/ChatWindow/ChatWindow'
 import "./MainPage.css"
 
-export default function MainPage() {
+export default function MainPage(props) {
+  const { setIsLoggedIn, user } = props;
+
   return (
     <div className='MainPage'>
         <div className="container">
             <div className="sidebar">
-                <SideBar />
+                <SideBar setIsLoggedIn={setIsLoggedIn} user={user} />
             </div>
             <div className="chatWindow">
                 <ChatWindow />
