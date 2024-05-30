@@ -1,16 +1,26 @@
 import React, { useState } from 'react'
 import "../Signup/Signup.css"
 import { Link } from 'react-router-dom';
+import UserServices from '../Services/UserServices';
 
 function Signup() {
 
         const [email, setEmail] =useState();
         const [password, setPassword] =useState();
-        const [confirmpassword, setConfirmPassword] =useState();
+        const [password_confirmation, setConfirmPassword] =useState();
 
-        const handleSignup = () =>{
-            alert("Sign up Succesful");
+        async function handleSubmit(event){
+            event.preventDefault();
+            const info = {
+                email,
+                password,
+                password_confirmation
+            }
+
+            await UserServices.signup(info);
+            
         }
+
 
 
   return (
@@ -22,7 +32,7 @@ function Signup() {
 
         <img src={`${process.env.PUBLIC_URL}/assets/images/slack2.png`} alt='Description of image' className='image-small' />
         </div>
-            <form className="col-12 col-md-6 py-4 px-3">
+            <form className="col-12 col-md-6 py-4 px-3" onSubmit={handleSubmit}>
                 <h4 className='signup-title text-center py-2 mb-2'>Sign up</h4>
                 <div className='form-floating mb-3'>
                     <input type="email" className='form-control' id="email" placeholder='name@example.com' required onChange={(e) => {setEmail( e.target.value)}}/>
@@ -38,7 +48,7 @@ function Signup() {
                 </div>
            
                 <div className='text-center'>
-                    <button className='signup-btn py-3 rounded-3' onClick={()=>{handleSignup()}}>Sign up </button>
+                    <button className='signup-btn py-3 rounded-3'>Sign up </button>
                 </div>
                 <div className='text-center mt-4'>
                     Have an account? <Link to="/Login">Log In</Link>

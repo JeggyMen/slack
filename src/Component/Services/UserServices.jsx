@@ -20,6 +20,24 @@ const UserServices = {
             }
             return [];
         }
+    },
+    signup: async function(info){
+        if(info.password !== info.password_confirmation){
+            return alert("Passwords don't match!");
+
+        }
+
+        try {
+            const response = await axios.post(`${API_URL}/auth/`, info);
+            const { data } = response;
+            if(data.data){
+                return alert("Account creation succesful!");
+            }
+        } catch(error){
+            if(error.response.data.errors){
+                return alert ("Unable to create this account.")
+            }
+        }
     }
 }
 
