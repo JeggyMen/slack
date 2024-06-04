@@ -4,10 +4,18 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './SideBar.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import UserServices from '../Services/UserServices';
+import { Button, Modal } from 'react-bootstrap';
+import Select from 'react-select';
 
 function SideBar(props) {
     const { setIsLoggedIn, user } = props;
     const [userList, setUserList] = useState([]);
+    const [show, setShow] = useState(false);
+    const [channelName, setChannelName] = useState('');
+    const [selectedUsers, setSelectedUsers] = useState([]);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     useEffect(() => {
         async function fetchUsers() {
@@ -21,10 +29,36 @@ function SideBar(props) {
         fetchUsers();
     }, [user]);
 
+    const handleChannelNameChange = (e) => setChannelName(e.target.value);
+    const handleUserChange = (selectedOptions) => setSelectedUsers(selectedOptions);
+
+    const handleSave = async () => {
+        try {
+            const userIds = selectedUsers.map(user => user.id);
+            const newChannel = {
+                name: channelName,
+                user_ids: userIds
+            };
+            // Assume createChannel is a function that handles channel creation
+            await UserServices.createChannel(newChannel);
+            setChannelName('');
+            setSelectedUsers([]);
+            handleClose();
+        } catch (error) {
+            console.error('Failed to create channel:', error);
+        }
+    };
+
     function logout() {
         localStorage.clear();
         setIsLoggedIn(false);
     }
+
+    const userOptions = userList.map(user => ({
+        value: user.id,
+        label: user.email,
+        id: user.id
+    }));
 
     return (
         <div className='container-fluid'>
@@ -50,7 +84,7 @@ function SideBar(props) {
                                     <a className='nav-link text-white bi bi-lock-fill' href="#"> Rufus</a>
                                 </li>
                                 <li className='nav-item'>
-                                    <a className='nav-link text-white bi bi-window-plus' href="#"> Add Channel</a>
+                                    <a className='nav-link text-white bi bi-window-plus' href="#" onClick={handleShow}> Add Channel</a>
                                 </li>
                             </ul>
                         </div>
@@ -77,9 +111,6 @@ function SideBar(props) {
                                             <div className='nav-link text-white'>No users available</div>
                                         </li>
                                     )}
-                                    <li className='nav-item'>
-                                        <a className='nav-link text-white bi bi-window-plus' href="#"> Direct Message</a>
-                                    </li>
                                 </ul>
                         </div>
                     </div>
@@ -103,6 +134,45 @@ function SideBar(props) {
                     </div>
                 </div>
             </div>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add New Channel</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form>
+                        <div className="mb-3">
+                            <label htmlFor="channelName" className="form-label">Channel Name</label>
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                id="channelName" 
+                                value={channelName}
+                                onChange={handleChannelNameChange}
+                                placeholder="Enter channel name" 
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="channelUsers" className="form-label">Add Users</label>
+                            <Select
+                                isMulti
+                                options={userOptions}
+                                className="basic-multi-select"
+                                classNamePrefix="select"
+                                onChange={handleUserChange}
+                            />
+                        </div>
+                    </form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button className="bg-violet" variant="primary" onClick={handleSave}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

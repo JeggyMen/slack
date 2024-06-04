@@ -4,7 +4,6 @@ import Login from './Component/Login/Login';
 import SideBar from "./Component/SideBar/SideBar";
 import ChatWindow from "./Component/ChatWindow/ChatWindow";
 import Signup from "./Component/Signup/Signup";
-import data from './Component/data/bankUsers.json';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MainPage from './MainPage/MainPage';

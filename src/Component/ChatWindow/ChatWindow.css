@@ -1,5 +1,5 @@
 .chatInfo {
-    height:60px;
+    height: 60px;
     background-color: #8744f3;
     display: flex;
     align-items: center;
@@ -7,6 +7,8 @@
     padding: 30px;
     color: aliceblue;
     font-size: 1.5em;
+    position: sticky;
+    top: 0;
 }
 
 .chatIcons i {
@@ -18,6 +20,54 @@
 .ChatWindow {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh; /* Full viewport height */
     background-color: #f0f0f0; /* Optional: background color for the chat window */
+}
+
+.messagesContainer {
+    flex-grow: 1; /* Take the remaining space */
+    overflow-y: auto; /* Add scrollbar if content overflows */
+    padding: 10px;
+}
+
+.messages {
+    background-color: antiquewhite;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.messagesOwn{
+    background-color: rgb(224, 158, 70);
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input {
+    background-color: white;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid rgb(0, 0, 0);
+    border-bottom: 3px solid rgb(0, 0, 0);
+    border-radius: 2px;
+    border-bottom-right-radius: 15px;
+    position: sticky;
+    bottom: 0;
+}
+
+.input > .inputArea {
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+button {
+    margin-left: 10px;
 }

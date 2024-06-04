@@ -38,6 +38,26 @@ const UserServices = {
                 return alert ("Unable to create this account.")
             }
         }
+    },
+
+    sendMessage: async function(user, info){
+        try {
+                const headers = {
+                    "acces-token": user.accessToken,
+                     client: user.client, 
+                     expiry: user.expiry,
+                     uid: user.id
+                }
+                const response = axios.post(`${API_URL}/messages`, info , {headers});
+                const { data } = response;
+                if(data.data){
+                    return alert("Message Sent!")
+                } else {
+                    return alert("Cannot send message!")
+                }
+        }catch(error){
+            console.log(error);
+        }
     }
 }
 
