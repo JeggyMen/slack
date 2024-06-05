@@ -6,17 +6,14 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import UserServices from '../Services/UserServices';
 import { Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
-
 function SideBar(props) {
-    const { setIsLoggedIn, user } = props;
+    const { setIsLoggedIn, user, setSelectedUser } = props;
     const [userList, setUserList] = useState([]);
     const [show, setShow] = useState(false);
     const [channelName, setChannelName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     useEffect(() => {
         async function fetchUsers() {
             try {
@@ -28,10 +25,8 @@ function SideBar(props) {
         }
         fetchUsers();
     }, [user]);
-
     const handleChannelNameChange = (e) => setChannelName(e.target.value);
     const handleUserChange = (selectedOptions) => setSelectedUsers(selectedOptions);
-
     const handleSave = async () => {
         try {
             const userIds = selectedUsers.map(user => user.id);
@@ -48,18 +43,15 @@ function SideBar(props) {
             console.error('Failed to create channel:', error);
         }
     };
-
     function logout() {
         localStorage.clear();
         setIsLoggedIn(false);
     }
-
     const userOptions = userList.map(user => ({
         value: user.id,
         label: user.email,
         id: user.id
     }));
-
     return (
         <div className='container-fluid'>
             <div className='row'>
@@ -69,7 +61,6 @@ function SideBar(props) {
                             <span className='fs-2 ps-5'>Avion School</span>
                         </a>
                         <hr className='text-white d-none d-sm-block' />
-                        
                         <div className='dropdown ps-4'>
                             <a href="#submenu1" className='nav-link text-white' data-bs-toggle="collapse">
                                 <i className='bi bi-grid'></i>
@@ -88,7 +79,6 @@ function SideBar(props) {
                                 </li>
                             </ul>
                         </div>
-
                         <div className='dropdown mt-3 ps-4'>
                                 <a href="#submenu2" className='nav-link text-white' data-bs-toggle="collapse">
                                     <i className='bi bi-chat'></i>
@@ -101,8 +91,13 @@ function SideBar(props) {
                                             const { id, email } = individual;
                                             return (
                                                 <li className='nav-item' key={id}>
-                                                    <a className='nav-link text-white bi bi-person-fill' href="#">ID: {id}</a>
-                                                    <a className='nav-link text-white bi bi-person-fill' href="#">Email: {email}</a>
+                                                    <a
+                                                        className='nav-link text-white bi bi-person-fill'
+                                                        href="#"
+                                                        onClick={() => setSelectedUser(individual)}
+                                                    >
+                                                        Email: {email}
+                                                    </a>
                                                 </li>
                                             );
                                         })
@@ -114,7 +109,6 @@ function SideBar(props) {
                                 </ul>
                         </div>
                     </div>
-
                     <div className="log-out dropdown open">
                         <a
                             className="btn border-none dropdown-toggle text-white"
@@ -134,7 +128,6 @@ function SideBar(props) {
                     </div>
                 </div>
             </div>
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add New Channel</Modal.Title>
@@ -143,13 +136,13 @@ function SideBar(props) {
                     <form>
                         <div className="mb-3">
                             <label htmlFor="channelName" className="form-label">Channel Name</label>
-                            <input 
-                                type="text" 
-                                className="form-control" 
-                                id="channelName" 
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="channelName"
                                 value={channelName}
                                 onChange={handleChannelNameChange}
-                                placeholder="Enter channel name" 
+                                placeholder="Enter channel name"
                             />
                         </div>
                         <div className="mb-3">
@@ -176,5 +169,4 @@ function SideBar(props) {
         </div>
     );
 }
-
 export default SideBar;

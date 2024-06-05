@@ -1,57 +1,63 @@
-import React, { useContext, useState , useEffect} from 'react';
-import "./ChatWindow.css";
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { API_URL } from '../Constants/Constants';
 import axios from 'axios';
-import ChatContext from '../Context/chatContext';
-import SessionContext from '../Context/SessionContext';
-import { MessageContext } from '../Context/MessageContext';
-
+import { API_URL } from '../Constants/Constants';
+import UserServices from '../Services/UserServices';
+import './ChatWindow.css';
 function ChatWindow(props) {
     const [show, setShow] = useState(false);
-    const { userList } = props;
+    const [text, setText] = useState("");
+    const [messages, setMessages] = useState([]);
+    const { user, selectedUser } = props;
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [text, setText] = useState("");
-
-    const MessageDisplay = () =>{
-        const { session } = useContext(SessionContext);
-        const { chat } = useContext(ChatContext);
-        const { messages, setMessages } = useContext(MessageContext);
-        const {toggleMessage, setToggleMessage} = useState(false);
-    
-
-    const fetchMessages = async() => {
-        const endpoint = `${API_URL}/messages?reciever_id=${chat.id}&receiver_class=${chat.type}`
-        const headers = {
-            'access-token': session.accessToken,
-            'client': session.client,
-            'expiry': session.expiry,
-            'uid': session.uid,
-        };
-        try {
-            const response = await axios.get(endpoint, { headers });
-        
-            if (response.status === 200) {
-              setMessages(response.data.data);
-            } else {
-              console.log('Failed to fetch messages:', response.statusText);
-            }
-          } catch (error) {
-            console.error('Error fetching messages:', error);
-          }
-
+    const fetchMessages = async () => {
+        if (selectedUser) {
+            const fetchedMessages = await UserServices.fetchMessages(user, selectedUser);
+            setMessages(fetchedMessages);
+        }
     };
     useEffect(() => {
-        chat && fetchMessages();
-  }, [messages, toggleMessage]);
-
-    }
-
+        fetchMessages();
+    }, [selectedUser]);
+    const handleSendMessage = async () => {
+        if (!text.trim()) {
+            return;
+        }
+        const messageData = {
+            receiver_id: selectedUser.id,
+            receiver_class: 'User',
+            body: text,
+        };
+        const headers = {
+            'access-token': user.accessToken,
+            'client': user.client,
+            'expiry': user.expiry,
+            'uid': user.uid,
+        };
+        try {
+            const response = await axios.post(`${API_URL}/messages`, messageData, { headers });
+            if (response.status === 200) {
+                const newMessage = response.data.data;
+                setMessages(prevMessages => [...prevMessages, newMessage]);
+                setText('');
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                console.error('Unauthorized: Invalid or expired token');
+            } else {
+                console.error('Failed to send message:', error);
+            }
+        }
+    };
+    const getUserNameFromEmail = (email) => {
+        if (!email) return "";
+        return email.split('@')[0];
+    };
     return (
         <div className='ChatWindow'>
             <div className="chatInfo">
-                <span>Johnneil</span>
+                <span>{selectedUser?.email}</span>
                 <div className="chatIcons">
                     <i className="bi bi-camera-video-fill"></i>
                     <i className="bi bi-person-add"></i>
@@ -59,103 +65,33 @@ function ChatWindow(props) {
                 </div>
             </div>
             <div className='messagesContainer'>
-                {/* {messages && messages.map((message) => {
-                    const initial =(JSON.stringify(message.sender.email)[1])
-                })} */}
-                <div className='messages'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
+                {messages && messages.map((message, index) => (
+                    <div key={index} className={message.sender?.email === user.email ? 'messagesOwn' : 'messages'}>
+                        <div className='texts'>
+                            <p><strong>{getUserNameFromEmail(message.sender?.email)}:</strong> {message.body}</p>
+                            <span>{new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
                     </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className='messagesOwn'>
-                    <div className='texts'>
-                        <p>Messages</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
+                ))}
             </div>
             <div className='input'>
-                <input type="text" className="inputArea" placeholder='Type something...' value={text} onChange={e => setText(e.target.value)} />
-                <button>Send</button>
+                <input
+                    type="text"
+                    className="inputArea"
+                    placeholder='Type something...'
+                    value={text}
+                    onChange={e => setText(e.target.value)}
+                />
+                <button onClick={handleSendMessage}>Send</button>
             </div>
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Channel Details</Modal.Title>
+                    <Modal.Title>Chat Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* Replace with actual channel details */}
                     <div>
-                        <h5>Channel Name</h5>
-                        <p>Example Channel</p>
-                        <h5>Members</h5>
-                        <ul>
-                            <li>Johnneil</li>
-                            <li>User1</li>
-                            <li>User2</li>
-                            {/* Add more members as needed */}
-                        </ul>
+                        <h5>Chat with</h5>
+                        <p>{selectedUser?.email}</p>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -167,5 +103,4 @@ function ChatWindow(props) {
         </div>
     );
 }
-
 export default ChatWindow;

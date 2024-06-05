@@ -1,19 +1,28 @@
-import React, { useState, useEffect } from 'react';
+// import React, { useState, useEffect } from 'react';
 
-export const usePersistedChat = (value) => {
-  const [chat, setChat] = useState(() => {
-    const persistedChat = JSON.parse(localStorage.getItem('chat') || 'null');
+// export const usePersistedChat = (value) => {
+//   const [chat, setChat] = useState(() => {
+//     const persistedChat = JSON.parse(localStorage.getItem('chat') || 'null');
+//     return persistedChat || value;
+//   });
 
-    return persistedChat || value;
-  });
+//   useEffect(() => {
+//     localStorage.setItem('chat', JSON.stringify(chat));
+//   }, [chat]);
 
-  useEffect(() => {
-    localStorage.setItem('chat', JSON.stringify(chat));
-  }, [chat]);
+//   return [chat, setChat];
+// };
 
-  return [chat, setChat];
-};
+// const ChatContext = React.createContext({});
 
-const ChatContext = React.createContext({});
+// export const ChatProvider = ({ children }) => {
+//   const [chat, setChat] = usePersistedChat(null);
 
-export default ChatContext;
+//   return (
+//     <ChatContext.Provider value={{ chat, setChat }}>
+//       {children}
+//     </ChatContext.Provider>
+//   );
+// };
+
+// export default ChatContext;
