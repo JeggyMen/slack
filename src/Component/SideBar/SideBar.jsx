@@ -6,14 +6,18 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import UserServices from '../Services/UserServices';
 import { Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
+
+
 function SideBar(props) {
     const { setIsLoggedIn, user, setSelectedUser } = props;
     const [userList, setUserList] = useState([]);
     const [show, setShow] = useState(false);
     const [channelName, setChannelName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    
     useEffect(() => {
         async function fetchUsers() {
             try {
@@ -34,7 +38,6 @@ function SideBar(props) {
                 name: channelName,
                 user_ids: userIds
             };
-            // Assume createChannel is a function that handles channel creation
             await UserServices.createChannel(newChannel);
             setChannelName('');
             setSelectedUsers([]);
@@ -103,7 +106,7 @@ function SideBar(props) {
                                         })
                                     ) : (
                                         <li className='nav-item'>
-                                            <div className='nav-link text-white'>No users available</div>
+                                            <div className='nav-link text-white'>Loading Users....</div>
                                         </li>
                                     )}
                                 </ul>
@@ -119,10 +122,10 @@ function SideBar(props) {
                             aria-expanded="false"
                         >
                             <i className='bi bi-person fs-4'></i>
-                            <span className='fs-5 ms-1'>Johnneil</span>
+                            <span className='fs-5 ms-1'>{user.email}</span>
                         </a>
                         <div className="dropdown-menu" aria-labelledby="triggerId">
-                            <a className="dropdown-item" href="#">Active,UserName</a>
+                            <a className="dropdown-item" href="#">Active, {selectedUsers?.email}</a>
                             <a className="dropdown-item" href="#" onClick={logout}>Log-out</a>
                         </div>
                     </div>

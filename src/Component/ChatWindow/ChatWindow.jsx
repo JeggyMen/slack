@@ -52,7 +52,8 @@ function ChatWindow(props) {
     };
     const getUserNameFromEmail = (email) => {
         if (!email) return "";
-        return email.split('@')[0];
+        const userName = email.split('@')[0];
+        return userName.split('.')[0];
     };
     return (
         <div className='ChatWindow'>
