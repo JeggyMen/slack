@@ -3,6 +3,8 @@ import SideBar from '../Component/SideBar/SideBar';
 import ChatWindow from '../Component/ChatWindow/ChatWindow';
 import DecoyChatWindow from '../Component/ChatWindow/DecoyChatWindow';
 import "./MainPage.css";
+
+
 const getUserNameFromEmail = (email) => {
     if (!email) return "Unknown";
     return email.split('@')[0];
@@ -10,6 +12,8 @@ const getUserNameFromEmail = (email) => {
 export default function MainPage(props) {
     const { setIsLoggedIn, user } = props;
     const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedChannel, setSelectedChannel] = useState(null);
+    const [messages, setMessages] = useState([]);
     useEffect(() => {
         if (user) {
             console.log("User email:", user.email);
@@ -17,6 +21,11 @@ export default function MainPage(props) {
             console.log("User is undefined");
         }
     }, [user]);
+
+    useEffect(() => {
+        console.log('useEffect channel:' + selectedChannel)
+        console.log('useEffect User:' + selectedUser?.email)
+    }, [selectedUser, selectedChannel])
     const userName = getUserNameFromEmail(user?.email);
     return (
         <div className='MainPage'>
@@ -27,11 +36,18 @@ export default function MainPage(props) {
                         user={user}
                         setSelectedUser={setSelectedUser}
                         userName={userName}
+                        setSelectedChannel={setSelectedChannel}
+                        setMessages={setMessages}
                     />
                 </div>
                 <div className="chatWindow">
-                    {selectedUser ? (
-                        <ChatWindow user={user} selectedUser={selectedUser} />
+                    {selectedUser || selectedChannel ? (
+                        <ChatWindow user={user}
+                                    selectedUser={selectedUser}
+                                    selectedChannel={selectedChannel}
+                                    setSelectedChannel={setSelectedChannel}
+                                    setMessages={setMessages}
+                                    messages={messages} />
                     ) : (
                         <DecoyChatWindow /> 
                     )}

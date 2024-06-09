@@ -30,7 +30,7 @@ const App = () => {
           <Route path="/MainPage" element={<MainPage setIsLoggedIn={setIsLoggedIn} user={user} />} />
         </Routes>
       </BrowserRouter>
-      {isLoggedIn && (
+      {isLoggedIn && user (
         <div>
           <nav>
             <SideBar handleLogout={handleLogout} />

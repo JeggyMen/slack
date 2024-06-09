@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../Constants/Constants";
+
 const UserServices = {
     getUsers: async function(user){
         try{
@@ -12,6 +13,7 @@ const UserServices = {
             const response = await axios.get(`${API_URL}/users`, { headers });
             const users = response.data.data;
             return users.filter((user) => user.id >= 4980)
+            
         }catch(error){
             console.error(error);
             if(error.response && error.response.data && error.response.data.error){
@@ -23,7 +25,9 @@ const UserServices = {
     signup: async function(info){
         if(info.password !== info.password_confirmation){
             return alert("Passwords don't match!");
+
         }
+
         try {
             const response = await axios.post(`${API_URL}/auth/`, info);
             const { data } = response;
@@ -36,11 +40,12 @@ const UserServices = {
             }
         }
     },
+
     sendMessage: async function(user, info){
         try {
             const headers = {
                 "access-token": user.accessToken,
-                client: user.client,
+                client: user.client, 
                 expiry: user.expiry,
                 uid: user.id
             }
@@ -55,6 +60,7 @@ const UserServices = {
             console.log(error);
         }
     },
+
     fetchMessages: async function(user, selectedUser){
         const endpoint = `${API_URL}/messages?receiver_id=${selectedUser.id}&receiver_class=User`;
         const headers = {
@@ -81,4 +87,5 @@ const UserServices = {
         }
     }
 }
+
 export default UserServices;
