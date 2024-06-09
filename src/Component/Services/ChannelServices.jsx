@@ -102,7 +102,7 @@ const ChannelServices = {
     },
 
     fetchChannelMessages: async function(user, channelId) {
-        const endpoint = `${API_URL}/api/v1/messages`;
+        const endpoint = `${API_URL}/messages`;
         const headers = {
             'access-token': user.accessToken,
             'client': user.client,
@@ -116,7 +116,7 @@ const ChannelServices = {
         try {
             const response = await axios.get(endpoint, { headers, params });
             if (response.status === 200) {
-                return response.data;
+                return response.data.data;
             } else {
                 console.log('Failed to fetch channel messages:', response.statusText);
                 return [];
@@ -134,7 +134,7 @@ const ChannelServices = {
 
 
     sendChannelMessage: async function(user, messageInfo) {
-        const endpoint = `${API_URL}/api/v1/messages`;
+        const endpoint = `${API_URL}/messages`;
         const headers = {
             'access-token': user.accessToken,
             'client': user.client,
@@ -148,8 +148,10 @@ const ChannelServices = {
         };
         try {
             const response = await axios.post(endpoint, requestBody, { headers });
-            if (response.status === 201) {
-                return response.data;
+
+            console.log('status: ' + response.status)
+            if (response.status === 200) {
+                return response.data.data;
             } else {
                 console.log('Failed to send channel message:', response.statusText);
             }

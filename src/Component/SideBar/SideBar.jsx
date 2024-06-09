@@ -7,8 +7,7 @@ import ChannelServices from '../Services/ChannelServices'; // Import ChannelServ
 import { Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
 
-function SideBar(props) {
-    const { setIsLoggedIn, user, setSelectedUser, setSelectedChannel } = props; // Add setSelectedChannel
+function SideBar({ setIsLoggedIn, user, setSelectedUser, setSelectedChannel, setMessages }) {
     const [userList, setUserList] = useState([]);
     const [channelList, setChannelList] = useState([]); // Add channelList
     const [show, setShow] = useState(false);
@@ -92,7 +91,10 @@ function SideBar(props) {
                                         <a
                                             className='nav-link text-white bi bi-lock-fill'
                                             href="#"
-                                            onClick={() => setSelectedChannel(channel)}
+                                            onClick={() => {
+                                                setMessages([]);
+                                                setSelectedUser(null);
+                                                setSelectedChannel(channel)}}
                                         >
                                             {channel.name}
                                         </a>
@@ -117,7 +119,13 @@ function SideBar(props) {
                                                 <a
                                                     className='nav-link text-white bi bi-person-fill'
                                                     href="#"
-                                                    onClick={() => setSelectedUser(individual)}
+                                                    onClick={() => {
+                                                        
+                                                setMessages([]);
+                                                        setSelectedChannel(null)
+                                                        setSelectedUser(null)
+                                                        setSelectedUser(individual)
+                                                    }}
                                                 >
                                                     Email: {email}
                                                 </a>

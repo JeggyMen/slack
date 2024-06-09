@@ -6,29 +6,30 @@ import UserServices from '../Services/UserServices';
 import ChannelServices from '../Services/ChannelServices';
 import './ChatWindow.css';
 
-function ChatWindow(props) {
+function ChatWindow({ user, selectedUser, selectedChannel, messages, setMessages }) {
     const [show, setShow] = useState(false);
     const [text, setText] = useState("");
-    const [messages, setMessages] = useState([]);
-    const { user, selectedUser, selectedChannel } = props;
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const fetchMessages = async () => {
         try {
+            console.log('user: ' + user)
             let fetchedMessages = [];
             if (selectedUser) {
                 fetchedMessages = await UserServices.fetchMessages(user, selectedUser);
             } else if (selectedChannel) {
                 fetchedMessages = await ChannelServices.fetchChannelMessages(user, selectedChannel.id);
             }
+            console.log('messages: ' + messages)
             setMessages(fetchedMessages);
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
     };
     useEffect(() => {
+        console.log('fetch');
         fetchMessages();
     }, [selectedUser, selectedChannel]);
 
