@@ -3,6 +3,8 @@ import SideBar from '../Component/SideBar/SideBar';
 import ChatWindow from '../Component/ChatWindow/ChatWindow';
 import DecoyChatWindow from '../Component/ChatWindow/DecoyChatWindow';
 import "./MainPage.css";
+
+
 const getUserNameFromEmail = (email) => {
     if (!email) return "Unknown";
     return email.split('@')[0];

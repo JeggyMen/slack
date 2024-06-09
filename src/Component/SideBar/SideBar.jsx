@@ -3,14 +3,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './SideBar.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import UserServices from '../Services/UserServices';
+import ChannelServices from '../Services/ChannelServices'; // Import ChannelServices
 import { Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
 
-
 function SideBar(props) {
-    const { setIsLoggedIn, user, setSelectedUser } = props;
+    const { setIsLoggedIn, user, setSelectedUser, setSelectedChannel } = props; // Add setSelectedChannel
     const [userList, setUserList] = useState([]);
+    const [channelList, setChannelList] = useState([]); // Add channelList
     const [show, setShow] = useState(false);
     const [channelName, setChannelName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -21,14 +21,27 @@ function SideBar(props) {
     useEffect(() => {
         async function fetchUsers() {
             try {
-                const users = await UserServices.getUsers(user);
-                setUserList(users);
+                const users = await ChannelServices.getUsers(user);
+                setUserList(users || []); // Ensure userList is not undefined
             } catch (error) {
                 console.error('Failed to fetch users:', error);
             }
         }
         fetchUsers();
     }, [user]);
+
+    useEffect(() => {
+        async function fetchChannels() {
+            try {
+                const channels = await ChannelServices.getChannels(user);
+                setChannelList(channels || []); // Ensure channelList is not undefined
+            } catch (error) {
+                console.error('Failed to fetch channels:', error);
+            }
+        }
+        fetchChannels();
+    }, [user]);
+
     const handleChannelNameChange = (e) => setChannelName(e.target.value);
     const handleUserChange = (selectedOptions) => setSelectedUsers(selectedOptions);
     const handleSave = async () => {
@@ -38,7 +51,7 @@ function SideBar(props) {
                 name: channelName,
                 user_ids: userIds
             };
-            await UserServices.createChannel(newChannel);
+            await ChannelServices.createChannel(user, newChannel);
             setChannelName('');
             setSelectedUsers([]);
             handleClose();
@@ -46,15 +59,18 @@ function SideBar(props) {
             console.error('Failed to create channel:', error);
         }
     };
+
     function logout() {
         localStorage.clear();
         setIsLoggedIn(false);
     }
+
     const userOptions = userList.map(user => ({
         value: user.id,
         label: user.email,
         id: user.id
     }));
+
     return (
         <div className='container-fluid'>
             <div className='row'>
@@ -71,12 +87,17 @@ function SideBar(props) {
                                 <i className='bi bi-arrow-down-short'></i>
                             </a>
                             <ul className='collapse show' id="submenu1" data-bs-parent="#sidebar-menu">
-                                <li className='nav-item'>
-                                    <a className='nav-link text-white bi bi-lock-fill' href="#"> Batch 35</a>
-                                </li>
-                                <li className='nav-item'>
-                                    <a className='nav-link text-white bi bi-lock-fill' href="#"> Rufus</a>
-                                </li>
+                                {(channelList || []).map(channel => (
+                                    <li className='nav-item' key={channel.id}>
+                                        <a
+                                            className='nav-link text-white bi bi-lock-fill'
+                                            href="#"
+                                            onClick={() => setSelectedChannel(channel)}
+                                        >
+                                            {channel.name}
+                                        </a>
+                                    </li>
+                                ))}
                                 <li className='nav-item'>
                                     <a className='nav-link text-white bi bi-window-plus' href="#" onClick={handleShow}> Add Channel</a>
                                 </li>
@@ -89,26 +110,20 @@ function SideBar(props) {
                                     <i className='bi bi-arrow-down-short'></i>
                                 </a>
                                 <ul className='collapse' id="submenu2" data-bs-parent="#sidebar-menu" style={{ maxHeight: '320px', overflowY: 'auto' }}>
-                                    {userList.length > 0 ? (
-                                        userList.map((individual) => {
-                                            const { id, email } = individual;
-                                            return (
-                                                <li className='nav-item' key={id}>
-                                                    <a
-                                                        className='nav-link text-white bi bi-person-fill'
-                                                        href="#"
-                                                        onClick={() => setSelectedUser(individual)}
-                                                    >
-                                                        Email: {email}
-                                                    </a>
-                                                </li>
-                                            );
-                                        })
-                                    ) : (
-                                        <li className='nav-item'>
-                                            <div className='nav-link text-white'>Loading Users....</div>
-                                        </li>
-                                    )}
+                                    {(userList || []).map((individual) => {
+                                        const { id, email } = individual;
+                                        return (
+                                            <li className='nav-item' key={id}>
+                                                <a
+                                                    className='nav-link text-white bi bi-person-fill'
+                                                    href="#"
+                                                    onClick={() => setSelectedUser(individual)}
+                                                >
+                                                    Email: {email}
+                                                </a>
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                         </div>
                     </div>
