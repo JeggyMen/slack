@@ -5,14 +5,14 @@ import MainPage from '../../MainPage/MainPage';
 import { API_URL } from '../Constants/Constants';
 import axios from 'axios';
 
-function Login() {
+function Login({ user, setUser }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")));
 
     useEffect(() => {
         if (user) {
+            setUser(user);
             setIsLoggedIn(true);
             localStorage.setItem("user", JSON.stringify(user));
             
@@ -37,13 +37,13 @@ function Login() {
                 const expiry = headers['expiry'];
                 const client = headers['client'];
                 const uid = headers['uid'];
-
                 setUser({
                     accessToken,
                     expiry,
                     client,
                     uid,
-                    id: data.data.id
+                    id: data.data.id,
+                    email: data.data.email,
                 });
 
                 setIsLoggedIn(true);

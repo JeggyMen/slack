@@ -24,7 +24,7 @@ const App = () => {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login handleLogin={handleLogin} />} />
+          <Route path="/" element={<Login handleLogin={handleLogin} user={user} setUser={setUser} />} />
           <Route path="/Login" element={<Login handleLogin={handleLogin} />} />
           <Route path="/Signup" element={<Signup />} />
           <Route path="/MainPage" element={<MainPage setIsLoggedIn={setIsLoggedIn} user={user} />} />
