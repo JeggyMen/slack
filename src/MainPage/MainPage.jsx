@@ -38,6 +38,7 @@ export default function MainPage(props) {
                         userName={userName}
                         setSelectedChannel={setSelectedChannel}
                         setMessages={setMessages}
+                        getUserNameFromEmail={getUserNameFromEmail}
                     />
                 </div>
                 <div className="chatWindow">

@@ -74,7 +74,7 @@ const UserServices = {
             if (response.status === 200) {
                 return response.data.data;
             } else {
-                console.log('Failed to fetch messages:', response.statusText);
+               
                 return [];
             }
         } catch (error) {

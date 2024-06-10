@@ -3,13 +3,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './SideBar.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import ChannelServices from '../Services/ChannelServices'; // Import ChannelServices
+import ChannelServices from '../Services/ChannelServices'; 
 import { Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
 
-function SideBar({ setIsLoggedIn, user, setSelectedUser, setSelectedChannel, setMessages }) {
+function SideBar({ setIsLoggedIn, user, userName, setSelectedUser, setSelectedChannel, setMessages,getUserNameFromEmail }) {
     const [userList, setUserList] = useState([]);
-    const [channelList, setChannelList] = useState([]); // Add channelList
+    const [channelList, setChannelList] = useState([]); 
     const [show, setShow] = useState(false);
     const [channelName, setChannelName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -21,7 +21,7 @@ function SideBar({ setIsLoggedIn, user, setSelectedUser, setSelectedChannel, set
         async function fetchUsers() {
             try {
                 const users = await ChannelServices.getUsers(user);
-                setUserList(users || []); // Ensure userList is not undefined
+                setUserList(users || []); 
             } catch (error) {
                 console.error('Failed to fetch users:', error);
             }
@@ -33,13 +33,24 @@ function SideBar({ setIsLoggedIn, user, setSelectedUser, setSelectedChannel, set
         async function fetchChannels() {
             try {
                 const channels = await ChannelServices.getChannels(user);
-                setChannelList(channels || []); // Ensure channelList is not undefined
+                if (channels) {
+                    setChannelList(channels); 
+                    channels.forEach(channel => {
+                        // console.log('Channel Object:', channel);
+                    });
+                } else {
+                    console.error('No channels found.');
+                }
             } catch (error) {
                 console.error('Failed to fetch channels:', error);
             }
         }
         fetchChannels();
     }, [user]);
+
+    useEffect(() => {
+        // console.log('Logged in username:', userName);
+    }, [userName]);
 
     const handleChannelNameChange = (e) => setChannelName(e.target.value);
     const handleUserChange = (selectedOptions) => setSelectedUsers(selectedOptions);
@@ -145,12 +156,13 @@ function SideBar({ setIsLoggedIn, user, setSelectedUser, setSelectedChannel, set
                             aria-expanded="false"
                         >
                             <i className='bi bi-person fs-4'></i>
-                            <span className='fs-5 ms-1'>{user.email}</span>
+                            <span className='fs-5 ms-1'>{getUserNameFromEmail(user.email)} </span>
                         </a>
                         <div className="dropdown-menu" aria-labelledby="triggerId">
                             <a className="dropdown-item" href="#">Active, {selectedUsers?.email}</a>
                             <a className="dropdown-item" href="#" onClick={logout}>Log-out</a>
                         </div>
+                        {/* {console.log('Selected Users in JSX:', selectedUsers)}  */}
                     </div>
                 </div>
             </div>

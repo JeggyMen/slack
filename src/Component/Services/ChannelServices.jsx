@@ -72,34 +72,34 @@ const ChannelServices = {
         }
     },
 
-    addMemberToChannel: async function(user, channelId, memberId) {
-        try {
-            const headers = {
-                "access-token": user.accessToken,
-                client: user.client,
-                expiry: user.expiry,
-                uid: user.uid
-            };
+    // addMemberToChannel: async function(user, channelId, memberId) {
+    //     try {
+    //         const headers = {
+    //             "access-token": user.accessToken,
+    //             client: user.client,
+    //             expiry: user.expiry,
+    //             uid: user.uid
+    //         };
 
-            const requestBody = {
-                id: channelId,
-                member_id: memberId
-            };
+    //         const requestBody = {
+    //             id: channelId,
+    //             member_id: memberId
+    //         };
 
-            const response = await axios.post(`${API_URL}/channel/add_member`, requestBody, { headers });
-            const { data } = response;
-            if (data) {
-                console.log("Member added successfully to the channel");
-                return data.data;
-            }
-        } catch (error) {
-            console.error('Error adding member to channel:', error);
-            if (error.response && error.response.data.errors) {
-                alert("Cannot add member to channel");
-            }
-            return null;
-        }
-    },
+    //         const response = await axios.post(`${API_URL}/channel/add_member`, requestBody, { headers });
+    //         const { data } = response;
+    //         if (data) {
+    //             console.log("Member added successfully to the channel");
+    //             return data.data;
+    //         }
+    //     } catch (error) {
+    //         console.error('Error adding member to channel:', error);
+    //         if (error.response && error.response.data.errors) {
+    //             alert("Cannot add member to channel");
+    //         }
+    //         return null;
+    //     }
+    // },
 
     fetchChannelMessages: async function(user, channelId) {
         const endpoint = `${API_URL}/messages`;
@@ -148,12 +148,9 @@ const ChannelServices = {
         };
         try {
             const response = await axios.post(endpoint, requestBody, { headers });
-
-            console.log('status: ' + response.status)
             if (response.status === 200) {
                 return response.data.data;
             } else {
-                console.log('Failed to send channel message:', response.statusText);
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {

@@ -15,21 +15,18 @@ function ChatWindow({ user, selectedUser, selectedChannel, messages, setMessages
 
     const fetchMessages = async () => {
         try {
-            console.log('user: ' + user)
             let fetchedMessages = [];
             if (selectedUser) {
                 fetchedMessages = await UserServices.fetchMessages(user, selectedUser);
             } else if (selectedChannel) {
                 fetchedMessages = await ChannelServices.fetchChannelMessages(user, selectedChannel.id);
             }
-            console.log('messages: ' + messages)
             setMessages(fetchedMessages);
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
     };
     useEffect(() => {
-        console.log('fetch');
         fetchMessages();
     }, [selectedUser, selectedChannel]);
 
@@ -93,14 +90,14 @@ function ChatWindow({ user, selectedUser, selectedChannel, messages, setMessages
                 </div>
             </div>
             <div className='messagesContainer'>
-            {messages && messages.map((message, index) => (
-    <div key={index} className={message.sender && message.sender.email === user.email ? 'messagesOwn' : 'messages'}>
-        <div className='texts'>
-            <p><strong>{message.sender ? getUserNameFromEmail(message.sender.email) : getUserNameFromEmail(user.email)}</strong> {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-            <span>{message.body}</span>
-        </div>
-    </div>
-))}
+                {messages && messages.map((message, index) => (
+                    <div key={index} className={message.sender && message.sender.email === user.email ? 'messagesOwn' : 'messages'}>
+                        <div className='texts'>
+                            <p><strong>{message.sender ? getUserNameFromEmail(message.sender.email) : getUserNameFromEmail(user.email)}</strong> {new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            <span>{message.body}</span>
+                        </div>
+                    </div>
+                ))}
             </div>
             <div className='input'>
                 <input
