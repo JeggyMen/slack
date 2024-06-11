@@ -9,13 +9,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MainPage from './MainPage/MainPage';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null); // Assuming user object contains authentication details
-  // Function to handle login
+  const [user, setUser] = useState(null); 
+ 
   const handleLogin = (user) => {
     setUser(user);
     setIsLoggedIn(true);
   };
-  // Function to handle logout
+  
   const handleLogout = () => {
     setUser(null);
     setIsLoggedIn(false);
@@ -36,7 +36,6 @@ const App = () => {
             <SideBar handleLogout={handleLogout} />
           </nav>
           <main>
-            {/* Pass the user's name to the ChatWindow component */}
             <ChatWindow user={user} />
           </main>
         </div>

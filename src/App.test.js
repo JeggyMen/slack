@@ -1,8 +1,12 @@
 import { render, screen } from '@testing-library/react';
+import renderer from "react-test-renderer";
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders App.js', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+});
+
+test("snapshot test for App.js", () => {
+  const counter = renderer.create(<App />).toJSON();
+  expect(counter).toMatchSnapshot();
 });

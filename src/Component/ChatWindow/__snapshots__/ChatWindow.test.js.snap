@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot test for ChatWindow 1`] = `
+<div
+  className="ChatWindow"
+>
+  <div
+    className="chatInfo"
+  >
+    <span />
+    <div
+      className="chatIcons"
+    >
+      <i
+        className="bi bi-camera-video-fill"
+      />
+      <i
+        className="bi bi-person-add"
+      />
+      <i
+        className="bi bi-three-dots"
+        onClick={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="messagesContainer"
+  />
+  <div
+    className="input"
+  >
+    <input
+      className="inputArea"
+      onChange={[Function]}
+      placeholder="Type something..."
+      type="text"
+      value=""
+    />
+    <button
+      onClick={[Function]}
+    >
+      Send
+    </button>
+  </div>
+</div>
+`;

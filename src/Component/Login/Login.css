@@ -6,8 +6,8 @@
 }
 
 .border-shadow {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Adjust the shadow as needed */
-    border: 1px solid #ddd; /* Optional: add a border */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); 
+    border: 1px solid #ddd; 
  }
 
 

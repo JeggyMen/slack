@@ -1,11 +1,8 @@
-.image-small {
-    width: 750px; 
-    height: auto; 
-}
+
 
 .border-shadow {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Adjust the shadow as needed */
-    border: 1px solid #ddd; /* Optional: add a border */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); 
+    border: 1px solid #ddd; 
  }
 
 
@@ -25,3 +22,18 @@
 .signup-container {
      background: linear-gradient( 135deg, #EE9AE5 10%, #5961F9 100%);
 }
+
+
+
+.image-small {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .image-small {
+        max-width: 50%;
+    }
+}
+
