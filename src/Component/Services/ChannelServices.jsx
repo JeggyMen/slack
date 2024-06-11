@@ -132,7 +132,6 @@ const ChannelServices = {
     },
     
 
-
     sendChannelMessage: async function(user, messageInfo) {
         const endpoint = `${API_URL}/messages`;
         const headers = {

@@ -43,7 +43,8 @@ function Login() {
                     expiry,
                     client,
                     uid,
-                    id: data.data.id
+                    id: data.data.id,
+                    email: data.data.email
                 });
 
                 setIsLoggedIn(true);

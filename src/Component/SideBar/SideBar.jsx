@@ -7,12 +7,13 @@ import ChannelServices from '../Services/ChannelServices';
 import { Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
 
-function SideBar({ setIsLoggedIn, user, userName, setSelectedUser, setSelectedChannel, setMessages,getUserNameFromEmail }) {
+function SideBar({ setIsLoggedIn, user, userName, setSelectedUser, setSelectedChannel, setMessages, getUserNameFromEmail }) {
     const [userList, setUserList] = useState([]);
     const [channelList, setChannelList] = useState([]); 
     const [show, setShow] = useState(false);
     const [channelName, setChannelName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState(''); // State for search term
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -49,7 +50,7 @@ function SideBar({ setIsLoggedIn, user, userName, setSelectedUser, setSelectedCh
     }, [user]);
 
     useEffect(() => {
-        // console.log('Logged in username:', userName);
+        
     }, [userName]);
 
     const handleChannelNameChange = (e) => setChannelName(e.target.value);
@@ -80,6 +81,11 @@ function SideBar({ setIsLoggedIn, user, userName, setSelectedUser, setSelectedCh
         label: user.email,
         id: user.id
     }));
+
+
+    const filteredUserList = userList.filter(user =>
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className='container-fluid'>
@@ -117,33 +123,41 @@ function SideBar({ setIsLoggedIn, user, userName, setSelectedUser, setSelectedCh
                             </ul>
                         </div>
                         <div className='dropdown mt-3 ps-4'>
-                                <a href="#submenu2" className='nav-link text-white' data-bs-toggle="collapse">
-                                    <i className='bi bi-chat'></i>
-                                    <span className='ms-2'>DM</span>
-                                    <i className='bi bi-arrow-down-short'></i>
-                                </a>
-                                <ul className='collapse' id="submenu2" data-bs-parent="#sidebar-menu" style={{ maxHeight: '320px', overflowY: 'auto' }}>
-                                    {(userList || []).map((individual) => {
-                                        const { id, email } = individual;
-                                        return (
-                                            <li className='nav-item' key={id}>
-                                                <a
-                                                    className='nav-link text-white bi bi-person-fill'
-                                                    href="#"
-                                                    onClick={() => {
-                                                        
-                                                setMessages([]);
-                                                        setSelectedChannel(null)
-                                                        setSelectedUser(null)
-                                                        setSelectedUser(individual)
-                                                    }}
-                                                >
-                                                    Email: {email}
-                                                </a>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
+                            <a href="#submenu2" className='nav-link text-white' data-bs-toggle="collapse">
+                                <i className='bi bi-chat'></i>
+                                <span className='ms-2'>DM</span>
+                                <i className='bi bi-arrow-down-short'></i>
+                            </a>
+                            <ul className='collapse' id="submenu2" data-bs-parent="#sidebar-menu" style={{ maxHeight: '320px', overflowY: 'auto' }}>
+                                <li className="nav-item p-2">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-sm"
+                                        placeholder="Search..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                </li>
+                                {(filteredUserList || []).map((individual) => {
+                                    const { id, email } = individual;
+                                    return (
+                                        <li className='nav-item' key={id}>
+                                            <a
+                                                className='nav-link text-white bi bi-person-fill'
+                                                href="#"
+                                                onClick={() => {
+                                                    setMessages([]);
+                                                    setSelectedChannel(null)
+                                                    setSelectedUser(null)
+                                                    setSelectedUser(individual)
+                                                }}
+                                            >
+                                                Email: {email}
+                                            </a>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
                         </div>
                     </div>
                     <div className="log-out dropdown open">
@@ -159,10 +173,9 @@ function SideBar({ setIsLoggedIn, user, userName, setSelectedUser, setSelectedCh
                             <span className='fs-5 ms-1'>{getUserNameFromEmail(user.email)} </span>
                         </a>
                         <div className="dropdown-menu" aria-labelledby="triggerId">
-                            <a className="dropdown-item" href="#">Active, {selectedUsers?.email}</a>
+                            <a className="dropdown-item" href="#">Active, {getUserNameFromEmail(user.email)}</a>
                             <a className="dropdown-item" href="#" onClick={logout}>Log-out</a>
                         </div>
-                        {/* {console.log('Selected Users in JSX:', selectedUsers)}  */}
                     </div>
                 </div>
             </div>
